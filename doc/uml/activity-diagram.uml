@@ -1,0 +1,32 @@
+@startuml
+
+(*) --> "Game Launch" 
+
+--> "Title screen"
+--> "Main Menu" 
+
+if "" as main then
+    -left-> "Play Game" as play
+else
+    -right-> "View Highscores" as highscores
+endif
+
+highscores -right-> main
+
+play -left-> "Game Loop" as game_loop
+
+if "Player reaches level end"
+    --> "Generate level segments"
+    --> "Handle input" as input
+else
+    --> "Handle input" as input
+
+-down-> "Update entities"
+-down-> "Render"
+if "Quit" then
+    --> [Yes]"Close game"
+    --> (*)
+else 
+    --> [No]game_loop
+
+@enduml

@@ -1,0 +1,99 @@
+class Rectangle {
+    width: int
+    height: int
+
+    intersect(rect: Rectangle): boolean
+}
+
+class Point {
+    x: float
+    y: float
+}
+
+class CollisionManager {
+    entities: GameEntity[]
+
+    detect(): void
+    resolve(): void
+
+    add(entity: GameEntity): void
+    remove(entity: GameEntity): void
+}
+
+class LevelSegment {
+    tiles: Tile[][]
+
+    load(filename: String): void
+
+    tick(): void
+    draw(): void
+}
+
+class Level {
+    segments: List<LevelSegment>
+
+    tick(): void
+    draw(): void
+}
+
+class LevelManager {
+    loadedSegments: List<LevelSegment>
+
+    load(): void
+    generate(): Level
+}
+
+abstract class GameEntity {
+    collision: Rectangle
+    position: Point
+
+    tick(): void
+    draw(): void
+
+    isMovable(): boolean
+}
+
+enum TileType {
+    Empty
+    RedFloor
+    BlueFloor
+    RedWall
+    BlueWall
+}
+
+class Tile extends GameEntity {
+    type: TileType
+}
+
+class MovingEntity extends GameEntity {
+    move(offset: Point): void
+}
+
+class Player extends MovingEntity {
+    score: int
+    powerup: Powerup
+
+    handleInput(): void
+}
+
+class Powerup {
+    onApply(): void
+    onRemove(): void
+
+    tick(): void
+}
+
+GameEntity --right- Rectangle
+Point --- GameEntity
+Point --right- CollisionManager
+
+CollisionManager --- Rectangle
+LevelManager --- Level
+
+Tile --- TileType
+Tile --left- Level
+
+LevelManager --left- LevelSegment
+LevelSegment --right- Level
+
+Player --right- Powerup
